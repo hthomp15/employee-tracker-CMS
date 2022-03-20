@@ -1,5 +1,5 @@
 const db = require('./config/connection');
-const catalog = require('./utils/prompts');
+const catalog = require('./utils/prompts')
 
 //connection
 db.connect((err) => {

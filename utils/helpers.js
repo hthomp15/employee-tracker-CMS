@@ -1,5 +1,5 @@
 const db = require('../config/connection');
-const cTable = require('console.table');
+const consoleTable = require('console.table');
 
 
 function getDepartment() {
