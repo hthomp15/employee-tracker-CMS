@@ -1,3 +1,3 @@
 DROP DATABASE IF EXISTS catalog;
-CREATE DATABASE catolog;
-USE catolog;
+CREATE DATABASE catalog;
+USE catalog;

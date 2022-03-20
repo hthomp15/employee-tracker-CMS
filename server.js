@@ -1,17 +1,12 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const db = require('./config/connection');
+const catalog = require('./utils/prompts');
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+//connection
+db.connect((err) => {
+    if(err) throw err;
+    console.log(`
+    Welcome to the Employee Management System!
+    `);
+    return catalog();
+});
 
-// parse incoming string or array data
-app.use(express.urlencoded({ extended: true }));
-// parse incoming JSON data
-app.use(express.json());
-
-
-
-app.listen(PORT, () => {
-    console.log(`API server on PORT ${PORT}`)
-})

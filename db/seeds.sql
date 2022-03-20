@@ -1,14 +1,11 @@
-Insert INTO employees (id, first_name, last_name, role_id, manager_name)    
-    VALUES 
-        ('Haile', 'Thompson', 7, NULL),
-        ('Lacey', 'Wisdom', 5, NULL),
-        ('Austin', 'Jocobs', 1, 2),
-        ('Whitney', 'Huston', 4, NULL),
-        ('Koco', 'Withorn', 9, 1),
-        ('Simba', 'Lawrence', 8, 1),
-        ('Connnie' 'Kimm' 2, 2),
-        ('Travon', 'Diggins', 6, 4)
-        
+   
+INSERT INTO department(name)
+VALUES
+('Sales'),
+('Marketing'),
+('Accounting'),
+('Engineering'),
+('Administration');
 
 INSERT INTO role(title, salary, department_id)
 VALUES
@@ -23,11 +20,16 @@ VALUES
 ('Administrative Assistant', 60000, 5),
 ('Office Manager', 100000, 5);
 
-   
-INSERT INTO department(name)
-VALUES
-('Sales'),
-('Marketing'),
-('Accounting'),
-('Engineering'),
-('Administration');
+Insert INTO employee (first_name, last_name, role_id, manager_id)    
+VALUES 
+    ('Haile', 'Thompson', 7, NULL),
+    ('Lacey', 'Wisdom', 5, NULL),
+    ('Austin', 'Jocobs', 1, 2),
+    ('Whitney', 'Huston', 4, NULL),
+    ('Koco', 'Withorn', 9, 1),
+    ('Simba', 'Lawrence', 8, 1),
+    ('Connnie', 'Kimm', 2, 2),
+    ('Travon', 'Diggins', 6, 4);
+    
+
+
