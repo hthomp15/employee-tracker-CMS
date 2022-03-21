@@ -37,12 +37,16 @@ const catalog = ()=> {
     })
 }
 
+module.exports = catalog;
+
 // All Department Functions (View, ADD, Delete)
 function viewDepartments() {
     db.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         console.table('\nAll Departments:', res);
-        catalog();
+        setTimeout(function () {
+            catalog()
+        }, 2000);
     });
 };
 
@@ -70,10 +74,10 @@ function addDepartment() {
                 if (err) throw err;
                 console.table('\nAll Departments:', res)
                 setTimeout(function() {
-                    prompt();
-                }, 1000);
+                    catalog();
+                }, 2000);
             })
-        }, 1000)
+        }, 2000)
     })
 });
 };
@@ -99,9 +103,9 @@ function deleteDepartment() {
                         console.table('\nAll Departments:', res)
                         setTimeout(function () {
                             catalog();
-                        }, 1000);
+                        }, 2000);
                     })
-                }, 1000)
+                }, 2000)
             })
         });
     })
@@ -115,7 +119,7 @@ function viewByDepartment() {
         console.table('\nEmployees by Department:', res);
         setTimeout(function() {
             catalog();
-        }, 1000);
+        }, 2000);
     })
 };
 
@@ -127,7 +131,7 @@ function viewDepartmentBudget() {
         console.table('\nDepartment Budgets:', res);
         setTimeout(function() {
             catalog();
-        }, 1000)
+        }, 2000)
     })
     
 }
@@ -140,8 +144,8 @@ function viewEmployees() {
       console.table('\nAll Employees:', res);
       setTimeout(function () {
         catalog()
-      }, 1000);
-    })
+      }, 2000);
+    }) 
   };
   
 function addEmployee() {
@@ -178,20 +182,29 @@ inquirer.prompt([
     message: function () {
         console.log("\nWhat is employee's role ID number?\n")
         getRole();
-    },
-    default: NULL
+    }
     },
     {
     name: 'manager_id',
     type: 'input',
     message: function () {
-        console.log("\nWhat is the employee's manager ID number? Leave blank or input NULL if manager.\n")
+        console.log("\nWhat is the employee's manager ID number? Leave blank or input null if manager.\n")
         getManager();
     },
-    default: NULL
-    },
-])
+    validate: managerInput => {
+        if(managerInput == "" || parseInt(managerInput) > 0) {
+        return true
+        } else {
+            console.log("Please enter the manager's id number")
+            return false
+        }
+    }
+}])
     .then(answers => {
+    if(answers.manager_id == "") {
+        answers.manager_id = null
+    } 
+
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
     const params = [answers.first_name, answers.last_name, answers.role_id, answers.manager_id];
     db.query(sql, params, (err) => {
@@ -200,7 +213,7 @@ inquirer.prompt([
         console.table(answers);
         setTimeout(function () {
         catalog();
-        }, 1000);
+        }, 2000);
     })
     })
 }
@@ -226,9 +239,9 @@ db.query('SELECT * FROM employee', (err, res) => {
             console.table('\nAll Employees:', res)
             setTimeout(function () {
             catalog();
-            }, 1000);
+            }, 2000);
         })
-        }, 1000)
+        }, 2000)
     })
     })
 });
@@ -242,7 +255,7 @@ db.query(sql, (err, res) => {
     console.table('\nEmployees by Manager:', res);
     setTimeout(function() {
         catalog();
-    }, 1000);
+    }, 2000);
 })
 };
 
@@ -254,7 +267,7 @@ function viewRoles() {
         console.table('\nAll Roles:', res);
         setTimeout(function() {
             catalog();
-        }, 1000);
+        }, 2000);
     })
 };
 
@@ -272,12 +285,20 @@ function addRole() {
                     return false;
                 }
             },
-            default: NULL
+
         },
         {
             name: 'salary',
             type: 'input',
-            message: "What is the role's salary?"
+            message: "What is the role's salary?",
+            validate: salaryInput => {
+                if (salaryInput) {
+                    return true;
+                } else {
+                    console.log("Please enter a salary");
+                    return false;
+                }
+            },
         },
         {
             name: 'department_id',
@@ -288,18 +309,18 @@ function addRole() {
             }
         }
     ]).then(answers => {
-            db.query('INSERT INTO role SET?', { title: answers.title, salary: answers.salary, department_id: answers.department_id }, (err) => {
+        db.query('INSERT INTO role SET?', { title: answers.title, salary: answers.salary, department_id: answers.department_id }, (err) => {
+            if (err) throw err;
+            console.log('Role added!')
+            setTimeout(function() {
+                db.query('SELECT * FROM role', (err, res) => {
                 if (err) throw err;
-                console.log('Role added!')
+                console.table('\nAll Roles:', res)
                 setTimeout(function() {
-                    db.query('SELECT * FROM role', (err, res) => {
-                    if (err) throw err;
-                    console.table('\nAll Roles:', res)
-                    setTimeout(function() {
-                        catalog();
-                    }, 1000);
-                })
-            }, 1000)
+                    catalog();
+                }, 2000);
+            })
+            }, 2000)
         })
     });
 };
@@ -324,9 +345,9 @@ function deleteRole() {
                 console.table('\nAll Roles:', res)
                 setTimeout(function() {
                     catalog();
-                }, 1000);
+                }, 2000);
             })
-        }, 1000)
+        }, 2000)
     })
 })
 }
@@ -365,10 +386,9 @@ function updateRole() {
                 name: 'role_id',
                 type: 'input',
                 message: function(){
-                    console.log("\nWhat is the employee's new role ID number? Leave blank or input NULL if manager.")
+                    console.log("\nWhat is the employee's new role ID number?")
                     getRole();
                 },
-                default: NULL
             }
         ]).then(answers => {
             const sql = `UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?`;
@@ -379,7 +399,7 @@ function updateRole() {
                 console.table(answers);
                 setTimeout(function() {
                     catalog();
-                }, 1000);
+                }, 2000);
             })
         })
     });
@@ -418,12 +438,14 @@ function updateManager() {
                 name: 'manager_id',
                 type: 'input',
                 message: function() {
-                    console.log("\nWhat is the employee's new manager ID number?\n")
+                    console.log("\nWhat is the employee's new manager ID number? Leave blank or enter null if necessary\n")
                     getManager();
                 },
-                default: NULL
             }
         ]).then(answers => {
+            if (answers.manager_id === ""){
+                answers.manager_id = null
+            }
             const sql = `UPDATE employee SET manager_id = ? WHERE first_name = ? AND last_name = ?`;
             const params = [answers.manager_id, answers.first_name, answers.last_name]
             db.query(sql, params, (err) => {
@@ -432,9 +454,8 @@ function updateManager() {
                 console.table(answers);
                 setTimeout(function() {
                     catalog();
-                }, 1000);
+                }, 2000);
             })
         })
     });
 }
-module.exports = catalog;
